@@ -7,17 +7,19 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center">
-                        <h2>Ask Question</h2>
-                        <div class="ml-auto"> 
+                        <h2>Edit Question</h2>
+                        <div class="ml-auto">
                             <a href="{{ route('questions.index') }}" class="btn btn-outline-secondary">Back to all Questions</a>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('questions.store') }}" method="POST">
-                        @include ('partials._form', ['buttonText' => "Ask Question"])
-                    </form>
+                   <form action="{{ route('questions.update', $question->id) }}" method="post">
+                        @method('PUT')
+                        @include ("partials._form", ['buttonText' => "Update Question"])
+                   </form>
                 </div>
             </div>
         </div>

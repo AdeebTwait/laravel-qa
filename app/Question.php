@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Answer;
 
 class Question extends Model
 {
@@ -48,5 +49,11 @@ class Question extends Model
     public function getBodyHtmlAttribute()
     {
         return \Parsedown::instance()->text($this->body);
+    }
+
+    public function acceptBestAnswer(Answer $answer)
+    {
+        $this->best_answer_id = $answer->id;
+        $this->save();
     }
 }

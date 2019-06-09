@@ -14,7 +14,7 @@ class Answer extends Model
 	 } 
 	 
 
-	 public function user($value='')
+	 public function user()
 	 {
 	 	return $this->belongsTo(User::class);
 	 }
@@ -41,20 +41,37 @@ class Answer extends Model
 	 	});
 	 }
 
-	 public function getStatusAttribute()
+
+
+    public function getStatusAttribute()
+    {
+        return $this->isBest() ? 'vote-accepted' : '';
+    }
+
+    public function getIsBestAttribute()
+    {
+        return $this->isBest();
+    }
+
+    public function isBest()
+    {
+        return $this->id == $this->question->best_answer_id;
+    }    
+
+
+	 public function votes()
 	 {
-	 	return $this->isBest() ? 'vote-accepted' : '';
+	 	return $this->morphToMany(User::class, 'votable');
 	 }
 
-	 public function getIsBestAttribute()
-	 {
-	 	return $this->isBest();
-	 }
+  	 public function upVotes()
+     {
+         return $this->votes()->wherePivot('vote', 1);
+     }
 
-	 public function isBest()
-	 {
-	 	return $this->id === $this->question->best_answer_id;
-	 }
-
+     public function downVotes()
+     {
+         return $this->votes()->wherePivot('vote', -1);
+     }
 
 }

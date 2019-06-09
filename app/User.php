@@ -57,5 +57,49 @@ class User extends Authenticatable
 
     }
 
+    public function voteQuestions()
+    {
+        return $this->morphedByMany(Question::class, 'votable');
+    }
 
+
+    public function voteAnswers()
+    {
+        return $this->morphedByMany(Answer::class, 'votable');
+    }
+
+    public function voteQuestion(Question $question, $vote)
+    {
+        $voteQuestions = $this->voteQuestions();
+        if ($voteQuestions->where('votable_id', $question->id)->exists()) {
+            $voteQuestions->updateExistingPivot($question, ['vote' => $vote]);
+        } else {
+            $voteQuestions->attach($question, ['vote' => $vote]);
+        }
+
+        $question->load('votes');
+        $downVotes = (int) $question->downVotes()->sum('vote');
+        $upVotes = (int) $question->upVotes()->sum('vote');
+
+        $question->votes_count = $downVotes + $upVotes;
+        $question->save();
+    }
+
+    public function voteAnswer(Answer $answer, $vote)
+    {
+        $voteAnswers = $this->voteAnswers();
+        if ($voteAnswers->where('votable_id', $answer->id)->exists()) {
+            $voteAnswers->updateExistingPivot($answer, ['vote' => $vote]);
+        } else {
+            $voteAnswers->attach($answer, ['vote' => $vote]);
+        }
+
+        $answer->load('votes');
+        $downVotes = (int) $answer->downVotes()->sum('vote');
+        $upVotes = (int) $answer->upVotes()->sum('vote');
+
+        $answer->votes_count = $downVotes + $upVotes;
+        $answer->save();
+    }
+    
 }

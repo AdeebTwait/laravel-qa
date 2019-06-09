@@ -11,29 +11,6 @@ class QuestionPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view the question.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Question  $question
-     * @return mixed
-     */
-    public function view(User $user, Question $question)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create questions.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function create(User $user)
-    {
-        // 
-    }
-
-    /**
      * Determine whether the user can update the question.
      *
      * @param  \App\User  $user
@@ -54,6 +31,6 @@ class QuestionPolicy
      */
     public function delete(User $user, Question $question)
     {
-        return $user->id === $question->user->id && $question->answers_count < 1;
+        return $user->id === $question->user->id;
     }
 }

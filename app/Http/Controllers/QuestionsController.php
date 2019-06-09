@@ -95,6 +95,10 @@ class QuestionsController extends Controller
     public function destroy(Question $question)
     {
         $this->authorize("delete", $question);
+        if($question->answers_count >= 10)
+        {
+            return redirect('/questions')->with('failed', "Your question has more than 10 answers, It cannot be deleted.");
+        }
         $question->delete();
         return redirect('/questions')->with('success', "Your question has been deleted.");
     }

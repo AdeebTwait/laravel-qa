@@ -56,7 +56,7 @@ class AnswersController extends Controller
      * @param  \App\Answer  $answer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Answer $answer)
+    public function destroy(Question $question, Answer $answer)
     {
          $this->authorize('delete', $answer);
         $answer->delete();

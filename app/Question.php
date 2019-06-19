@@ -70,13 +70,28 @@ class Question extends Model
 
     public function getBodyHtmlAttribute()
     {
-        return \Parsedown::instance()->text($this->body);
+        return clean($this->BodyHtml());
     }
 
     public function acceptBestAnswer(Answer $answer)
     {
         $this->best_answer_id = $answer->id;
         $this->save();
+    }
+
+    public function Excerpt($length)
+    {
+        return str_limit(strip_tags($this->BodyHtml()), $length);
+    }
+
+    public function getExcerptAttribute()
+    {
+        return $this->Excerpt(250);
+    }
+
+    public function BodyHtml()
+    {
+         return \Parsedown::instance()->text($this->body);   
     }
 
 }

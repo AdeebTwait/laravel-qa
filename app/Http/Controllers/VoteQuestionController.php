@@ -7,7 +7,7 @@ use App\Question;
 
 class VoteQuestionController extends Controller
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->middleware('auth');
 	}
